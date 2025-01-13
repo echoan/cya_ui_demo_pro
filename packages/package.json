@@ -1,6 +1,6 @@
 {
   "name": "cya_vue_ui",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "vue 组件开发尝试",
   "main": "dist/cya_vue_ui.common.js",
   "module": "dist/cya_vue_ui.esm.js",
