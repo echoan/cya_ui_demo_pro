@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2024-12-13 10:35:36
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-09 17:13:39
+ * @LastEditTime: 2025-01-13 13:32:22
  */
 //组件库 打包  这里使用的是 rollup 来打包，使用rollup 来打包的前 先安装相关依赖
 /*
@@ -27,6 +27,7 @@ import css from "rollup-plugin-css-only"; // 用于提取 CSS 文件
 import postcss from "rollup-plugin-postcss"; // 用于处理和提取 CSS
 import pkg from "./package.json"; //引入 package.json，用于获取库的相关信息
 import fs from "fs";
+import minify from "rollup-plugin-babel-minify";
 
 const componentsDir = path.resolve(__dirname, "package"); //组件源代码 目录
 const distDir = path.resolve(__dirname, "dist"); //打包输出目录
@@ -68,6 +69,7 @@ export default [
       vue({
         css: true, //使插件 处理组件中的css
       }),
+      minify({ comments: false }), // 删除注释并压缩
       babel({
         exclude: "node_modules/**",
         presets: ["@babel/preset-env"],
@@ -100,6 +102,7 @@ export default [
       vue({
         css: true,
       }),
+      minify({ comments: false }), // 删除注释并压缩
       /*
         该处是想要将每个组件的入口文件和样式在打包时分别打包进对应的组件名目录下，以便将来在前端使用时 配置按需使用时样式和组件的加载
         同样使用 rollup-plugin-css-only 识别不了绝对路径 想要实现目的 只能如下方式来实现 效率不如使用 rollup-plugin-postcss
