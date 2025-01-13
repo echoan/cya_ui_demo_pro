@@ -82,7 +82,7 @@
    * @LastEditors: Chengya
    * @LastEditTime: 2024-12-13 16:04:50
    */
-  console.log("当前版本：", "1.0.0");
+  console.log("当前版本：", "1.0.4");
   // import "./CyaButton/CyaButton.css";
   // import "./Title/Title.css";
   const components = [CyaButton, CyaTitle]; // index.js 建立的目的 在于 将来如果定义的组件多了 可以统一通过这个入口文件 全部引用
