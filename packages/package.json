@@ -1,10 +1,14 @@
 {
   "name": "cya_vue_ui",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "vue 组件开发尝试",
   "main": "dist/cya_vue_ui.common.js",
   "module": "dist/cya_vue_ui.esm.js",
   "unpkg": "dist/cya_vue_ui.umd.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "test": "test",
     "build": "../node_modules/.bin/rollup -c"
