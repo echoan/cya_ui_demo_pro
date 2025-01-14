@@ -10,7 +10,7 @@
   "dependencies": {
     "babel-plugin-import": "^1.13.8",
     "core-js": "^3.8.3",
-    "cya_vue_ui": "^1.0.5",
+    "cya_vue_ui": "^1.0.8",
     "vue": "^2.6.14"
   },
   "devDependencies": {
