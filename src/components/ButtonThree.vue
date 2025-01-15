@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2024-12-11 13:26:56
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-15 10:41:01
+ * @LastEditTime: 2025-01-15 15:32:13
 -->
 <template>
   <div>
@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { CyaButton } from 'cya_vue_ui'
+import { CyaButton } from 'cyaui_pro'
 export default {
   components: {
     CyaButton,

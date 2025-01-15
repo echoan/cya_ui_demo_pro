@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2024-12-13 11:18:14
  * @LastEditors: Chengya
- * @LastEditTime: 2024-12-13 11:18:16
+ * @LastEditTime: 2025-01-15 15:33:09
 -->
 <template>
   <div>
@@ -11,9 +11,8 @@
     <CyaButton @click="handler1">按钮2</CyaButton>
   </div>
 </template>
-
 <script>
-import CyaButton from '../../packages/package/CyaButton/CyaButton.vue'
+import CyaButton from '../../packages/package/CyaButton/index'
 export default {
   components: {
     CyaButton,
