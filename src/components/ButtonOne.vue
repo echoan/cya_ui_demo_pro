@@ -3,11 +3,11 @@
  * @Description: Description
  * @Date: 2024-12-13 11:16:17
  * @LastEditors: Chengya
- * @LastEditTime: 2024-12-13 13:31:17
+ * @LastEditTime: 2025-01-17 17:50:14
 -->
 <template>
   <div>
-    <h2>本地全局注册引用示例</h2>
+    <h2>全局注册引用示例</h2>
     <div class="btn_container">
       <CyaButton @click="handler1">按钮1</CyaButton>
       <CyaButton @click="handler1" type="primary">按钮1</CyaButton>

@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-17 15:37:48
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-17 17:12:45
+ * @LastEditTime: 2025-01-17 17:59:15
 -->
 
 # quick start
@@ -15,6 +15,7 @@
 ```js
 import cyaui from "cyaui_pro";
 import "cyaui_pro/dist/styles/main.css";
+Vue.use(cyaui);
 ```
 
 ### 全局注册后使用
@@ -116,3 +117,5 @@ export default {
 </script>
 <style></style>
 ```
+
+### 需要注意的是 如果配置了按需加载，然后又使用全局注册的方式的话，需要将 babel.config.js 配置的按需加载内容注释
