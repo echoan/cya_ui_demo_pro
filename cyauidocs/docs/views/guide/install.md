@@ -3,10 +3,10 @@
  * @Description: Description
  * @Date: 2025-01-17 15:38:29
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-17 17:10:53
+ * @LastEditTime: 2025-01-23 13:05:13
 -->
 
-# 安装
+# install
 
 ```js
 npm install cyaui_pro

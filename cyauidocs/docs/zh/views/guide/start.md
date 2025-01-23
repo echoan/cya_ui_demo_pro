@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-17 15:38:37
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-23 11:25:04
+ * @LastEditTime: 2025-01-23 13:05:52
 -->
 <!--
  * @Author: Chengya
@@ -37,7 +37,7 @@ Vue.use(cyaui);
 -->
 <template>
   <div>
-    <h2>本地全局注册引用示例</h2>
+    <h2>全局注册引用示例</h2>
     <div class="btn_container">
       <CyaButton @click="handler1">按钮1</CyaButton>
       <CyaButton @click="handler1" type="primary">按钮1</CyaButton>
