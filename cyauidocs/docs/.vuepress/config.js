@@ -3,10 +3,10 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-17 17:10:22
+ * @LastEditTime: 2025-01-23 11:09:17
  */
 module.exports = {
-  base: "/cya-ui/",
+  base: "/cyaui/",
   title: "cyaui",
   description: "测试",
   head: [
@@ -21,13 +21,13 @@ module.exports = {
   //多语言配置
   locales: {
     "/": {
-      base: "/cya-ui/",
+      base: "/cyaui/",
       //lang: "en-US",
       title: "cyaui",
       description: "Hello cyaui",
     },
     "/zh/": {
-      base: "/cya-ui/",
+      base: "/cyaui/",
       //lang: "zh-CN",
       title: "cyaui",
       description: "cya-ui-vuepress-测试",
