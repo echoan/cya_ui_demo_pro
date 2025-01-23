@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-23 11:09:17
+ * @LastEditTime: 2025-01-23 11:24:05
  */
 module.exports = {
   base: "/cyaui/",
@@ -54,10 +54,10 @@ module.exports = {
           { text: "Home", link: "/" },
           { text: "Git", link: "" },
           {
-            text: "  v1.1.1",
+            text: "  v1.0.0",
             items: [
               {
-                text: "v 1.1.1",
+                text: "v 1.0.0",
                 link: "/",
               },
             ],
@@ -65,16 +65,16 @@ module.exports = {
         ],
         sidebar: [
           {
-            title: "开发指南",
+            title: "Guide",
             collapsable: false,
             children: [
               {
-                title: "安装",
+                title: "install",
                 collapsable: false,
                 path: "views/guide/install.md",
               },
               {
-                title: "快速开始",
+                title: "quick start",
                 collapsable: false,
                 path: "views/guide/start.md",
               },
@@ -104,10 +104,10 @@ module.exports = {
           { text: "主页", link: "/" },
           { text: "Git仓库", link: "" },
           {
-            text: "  v1.1.1版",
+            text: "  v1.0.0",
             items: [
               {
-                text: "v 1.1.1版",
+                text: "v 1.0.0",
                 link: "/",
               },
             ],
