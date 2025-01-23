@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2024-12-13 10:35:36
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-13 13:32:22
+ * @LastEditTime: 2025-01-23 14:02:24
  */
 //组件库 打包  这里使用的是 rollup 来打包，使用rollup 来打包的前 先安装相关依赖
 /*
@@ -46,17 +46,17 @@ export default [
     input: "./index.js",
     output: [
       {
-        file: path.resolve(__dirname, "dist/cya_vue_ui.common.js"),
+        file: path.resolve(__dirname, "dist/cyaui.common.js"),
         format: "cjs",
         exports: "named", //值有两种  named/default named 适用于既有命名导出又有默认导出的情况  default 仅适用于只有默认导出的情况
       },
       {
-        file: path.resolve(__dirname, "dist/cya_vue_ui.esm.js"),
+        file: path.resolve(__dirname, "dist/cyaui.esm.js"),
         format: "esm",
         exports: "named",
       },
       {
-        file: path.resolve(__dirname, "dist/cya_vue_ui.umd.js"),
+        file: path.resolve(__dirname, "dist/cyaui.umd.js"),
         format: "umd",
         name: "CyaVueUI",
         exports: "named",

@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "sass": "^1.83.4",
+    "sass-loader": "^10.2.0",
     "vuepress": "^1.9.10"
   }
 }

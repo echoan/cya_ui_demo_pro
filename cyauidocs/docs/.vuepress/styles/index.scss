@@ -1,0 +1,23 @@
+@mixin vuePressLogo {
+  background-image: url("../assets/favicon.png");
+  background-size: cover;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  .home-link.router-link-active {
+    display: flex;
+    align-items: center;
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      margin-left: 6px;
+      border-radius: 50%;
+      @include vuePressLogo;
+    }
+  }
+}

@@ -3,18 +3,18 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-23 11:24:05
+ * @LastEditTime: 2025-01-23 16:56:57
  */
 module.exports = {
   base: "/cyaui/",
   title: "cyaui",
-  description: "测试",
+  description: "build vue2.x components",
   head: [
     [
       "link",
       {
         rel: "icon",
-        herf: "../../../public/favicon.ico",
+        herf: "./assets/favicon.ico",
       },
     ],
   ],
@@ -24,13 +24,13 @@ module.exports = {
       base: "/cyaui/",
       //lang: "en-US",
       title: "cyaui",
-      description: "Hello cyaui",
+      description: "How to build a vue2.x components from 0 to 1",
     },
     "/zh/": {
       base: "/cyaui/",
       //lang: "zh-CN",
       title: "cyaui",
-      description: "cya-ui-vuepress-测试",
+      description: "从0开始构建一个基于vue2.x的组件库",
     },
   },
   //主题配置

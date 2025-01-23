@@ -1,10 +1,10 @@
 {
-  "name": "cyaui_pro",
+  "name": "cyaui",
   "version": "1.0.0",
   "description": "vue 组件开发尝试",
-  "main": "dist/cya_vue_ui.common.js",
-  "module": "dist/cya_vue_ui.esm.js",
-  "unpkg": "dist/cya_vue_ui.umd.js",
+  "main": "dist/cyaui.common.js",
+  "module": "dist/cyaui.esm.js",
+  "unpkg": "dist/cyaui.umd.js",
   "files": [
     "dist",
     "README.md"
