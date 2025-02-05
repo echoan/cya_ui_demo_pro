@@ -3,12 +3,13 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-02-05 14:55:08
+ * @LastEditTime: 2025-02-05 17:08:38
  */
 module.exports = {
   base: "/cyaui/",
   title: "cyaui",
-  description: "build vue2.x components",
+  // description: "build vue2.x components",
+  description: "从0开始构建一个基于vue2.x的组件库",
   head: [
     [
       "link",
@@ -20,13 +21,13 @@ module.exports = {
   ],
   //多语言配置
   locales: {
+    // "/": {
+    //   base: "/cyaui/",
+    //   //lang: "en-US",
+    //   title: "cyaui",
+    //   description: "How to build a vue2.x components from 0 to 1",
+    // },
     "/": {
-      base: "/cyaui/",
-      //lang: "en-US",
-      title: "cyaui",
-      description: "How to build a vue2.x components from 0 to 1",
-    },
-    "/zh/": {
       base: "/cyaui/",
       //lang: "zh-CN",
       title: "cyaui",
@@ -36,53 +37,53 @@ module.exports = {
   //主题配置
   themeConfig: {
     locales: {
+      // "/": {
+      //   selectText: "Languages",
+      //   label: "English",
+      //   search: true,
+      //   searchMaxSuggestions: 10,
+      //   ariaLabel: "Languages",
+      //   // editLinkText: "Edit this page on GitHub",
+      //   // serviceWorker: {
+      //   //   updatePopup: {
+      //   //     message: "New content is available.",
+      //   //     buttonText: "Refresh",
+      //   //   },
+      //   // },
+      //   //algolia: {},
+      //   nav: [
+      //     { text: "Home", link: "/" },
+      //     { text: "Git", link: "" },
+      //     {
+      //       text: "  v1.0.0",
+      //       items: [
+      //         {
+      //           text: "v 1.0.0",
+      //           link: "/",
+      //         },
+      //       ],
+      //     },
+      //   ],
+      //   sidebar: [
+      //     {
+      //       title: "Guide",
+      //       collapsable: false,
+      //       children: [
+      //         {
+      //           title: "install",
+      //           collapsable: false,
+      //           path: "views/guide/install.md",
+      //         },
+      //         {
+      //           title: "quick start",
+      //           collapsable: false,
+      //           path: "views/guide/start.md",
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
       "/": {
-        selectText: "Languages",
-        label: "English",
-        search: true,
-        searchMaxSuggestions: 10,
-        ariaLabel: "Languages",
-        // editLinkText: "Edit this page on GitHub",
-        // serviceWorker: {
-        //   updatePopup: {
-        //     message: "New content is available.",
-        //     buttonText: "Refresh",
-        //   },
-        // },
-        //algolia: {},
-        nav: [
-          { text: "Home", link: "/" },
-          { text: "Git", link: "" },
-          {
-            text: "  v1.0.0",
-            items: [
-              {
-                text: "v 1.0.0",
-                link: "/",
-              },
-            ],
-          },
-        ],
-        sidebar: [
-          {
-            title: "Guide",
-            collapsable: false,
-            children: [
-              {
-                title: "install",
-                collapsable: false,
-                path: "views/guide/install.md",
-              },
-              {
-                title: "quick start",
-                collapsable: false,
-                path: "views/guide/start.md",
-              },
-            ],
-          },
-        ],
-      },
-      "/zh/": {
         // 多语言下拉菜单的标题
         selectText: "选择语言",
         // 该语言在下拉菜单中的标签
