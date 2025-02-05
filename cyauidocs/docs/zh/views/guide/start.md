@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-17 15:38:37
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-23 13:05:52
+ * @LastEditTime: 2025-02-05 13:59:26
 -->
 <!--
  * @Author: Chengya
@@ -20,8 +20,8 @@
 ### Vue 项目的入口文件 main.js 中
 
 ```js
-import cyaui from "cyaui_pro";
-import "cyaui_pro/dist/styles/main.css";
+import cyaui from "cyaui";
+import "cyaui/dist/styles/main.css";
 Vue.use(cyaui);
 ```
 
@@ -80,12 +80,12 @@ module.exports = {
     [
       "babel-plugin-import",
       {
-        libraryName: "cyaui_pro", // 组件库名称
+        libraryName: "cyaui", // 组件库名称
         libraryDirectory: "dist", // 组件主目录
         camel2DashComponentName: false, // 驼峰转短横线
         style: (name) => {
           const componentName = name.split("/").pop(); // 获取组件名
-          return `cyaui_pro/dist/${componentName}/${componentName}.css`;
+          return `cyaui/dist/${componentName}/${componentName}.css`;
         },
       },
     ],
@@ -110,7 +110,7 @@ module.exports = {
   </div>
 </template>
 <script>
-import { CyaButton } from "cyaui_pro";
+import { CyaButton } from "cyaui";
 export default {
   components: {
     CyaButton,

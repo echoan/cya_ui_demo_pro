@@ -1,6 +1,6 @@
 {
   "name": "cyaui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "vue 组件开发尝试",
   "main": "dist/cyaui.common.js",
   "module": "dist/cyaui.esm.js",

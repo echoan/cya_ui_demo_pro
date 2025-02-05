@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-23 16:56:57
+ * @LastEditTime: 2025-01-23 17:12:00
  */
 module.exports = {
   base: "/cyaui/",
@@ -14,7 +14,7 @@ module.exports = {
       "link",
       {
         rel: "icon",
-        herf: "./assets/favicon.ico",
+        href: "/assets/favicon.ico",
       },
     ],
   ],
