@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-02-06 15:29:23
+ * @LastEditTime: 2025-02-06 17:50:37
  */
 module.exports = {
   base: "/cyaui/",
@@ -108,10 +108,10 @@ module.exports = {
             link: "https://github.com/echoan/cya_ui_demo_pro",
           },
           {
-            text: "  v1.0.0",
+            text: "  v1.0.1",
             items: [
               {
-                text: "v 1.0.0",
+                text: "v 1.0.1",
                 link: "/",
               },
             ],
@@ -142,6 +142,23 @@ module.exports = {
                 title: "快速开始",
                 collapsable: false,
                 path: "/zh/views/guide/start.md",
+              },
+            ],
+          },
+          {
+            title: "组件演示",
+            collapsable: false,
+            children: [
+              {
+                title: "基础组件",
+                collapsable: false,
+                children: [
+                  {
+                    title: "Button 按钮",
+                    collapsable: false,
+                    path: "/zh/views/components/Basic/Button.md",
+                  },
+                ],
               },
             ],
           },
