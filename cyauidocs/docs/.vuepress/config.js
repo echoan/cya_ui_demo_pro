@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-02-05 17:08:38
+ * @LastEditTime: 2025-02-06 15:29:23
  */
 module.exports = {
   base: "/cyaui/",
@@ -103,7 +103,10 @@ module.exports = {
         //algolia: {},
         nav: [
           { text: "主页", link: "/" },
-          { text: "Git仓库", link: "" },
+          {
+            text: "Git仓库",
+            link: "https://github.com/echoan/cya_ui_demo_pro",
+          },
           {
             text: "  v1.0.0",
             items: [
@@ -117,6 +120,17 @@ module.exports = {
         sidebar: [
           {
             title: "开发指南",
+            collapsable: false,
+            children: [
+              {
+                title: "组件库创建",
+                collapsable: false,
+                path: "/zh/views/guide/create.md",
+              },
+            ],
+          },
+          {
+            title: "使用指南",
             collapsable: false,
             children: [
               {

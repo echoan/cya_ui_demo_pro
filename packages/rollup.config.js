@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2024-12-13 10:35:36
  * @LastEditors: Chengya
- * @LastEditTime: 2025-01-23 14:02:24
+ * @LastEditTime: 2025-02-06 13:42:18
  */
 //组件库 打包  这里使用的是 rollup 来打包，使用rollup 来打包的前 先安装相关依赖
 /*
@@ -16,14 +16,14 @@
     @rollup/plugin-babel
     rollup@2(适配 @rollup/plugin-babel)
     rollup-plugin-replace(版本注入插件)
-    rollup-plugin-css-only(处理组件库样式)
-    npm install rollup-plugin-vue2 @rollup/plugin-babel rollup@2 rollup-plugin-replace rollup-plugin-css-only -D
+    rollup-plugin-css-only(处理组件库样式) 已使用 rollup-plugin-postcss 来代替
+    npm install rollup-plugin-vue2 @rollup/plugin-babel rollup@2 rollup-plugin-replace rollup-plugin-css-only rollup-plugin-postcss rollup-plugin-babel-minify -D
 */
 import path from "path";
 import vue from "rollup-plugin-vue2"; //用于处理 Vue 文件
 import babel from "@rollup/plugin-babel"; //用于 Babel 转译
 import replace from "rollup-plugin-replace"; //用于替换环境变量,注入版本号
-import css from "rollup-plugin-css-only"; // 用于提取 CSS 文件
+//import css from "rollup-plugin-css-only"; // 用于提取 CSS 文件
 import postcss from "rollup-plugin-postcss"; // 用于处理和提取 CSS
 import pkg from "./package.json"; //引入 package.json，用于获取库的相关信息
 import fs from "fs";
