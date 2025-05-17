@@ -3,10 +3,10 @@
  * @Description: Description
  * @Date: 2025-02-05 17:28:29
  * @LastEditors: Chengya
- * @LastEditTime: 2025-02-06 15:01:51
+ * @LastEditTime: 2025-05-17 17:00:02
 -->
 
-# 基于 vue2 创建一个 vue 组件库
+# 基于 vue2 从 0-1 创建一个 vue 组件库的实践（以 Button 组件为例）
 
 ## 准备工作
 
@@ -568,3 +568,136 @@ export default [
 发布时 如果遇到 npm login 报错:Public registration is not allowed，是因为 npm 的镜像源问题（通过 npm get registry 查看自己的镜像源，如果不是 https://registry.npmjs.org 需要修改。将 npm 的镜像源改为官方 npm config set registry https://registry.npmjs.org，发布完以后，可以再切换回来 npm config set registry https://registry.npmmirror.com（切换回来是为了 避免 npm install 安装依赖时报错）
 
 以上我们就完成了一个组件库的开发、打包、测试、发布的基本都流程，后续可以通过 npm install packageName 在项目中安装使用，后续我们也可以对已发布的组件库来进行更新和维护，但是每次更新后需要变更版本号（npm version patch）才可以重新发布到 npm.
+
+## 发布的组件库的使用指南
+
+### 安装
+
+```js
+npm install cyaui
+```
+
+### 使用方式一：全局注册使用
+
+#### Vue 项目的入口文件 main.js 中
+
+```js
+import cyaui from "cyaui";
+import "cyaui/dist/styles/main.css";
+Vue.use(cyaui);
+```
+
+#### 全局注册后使用示例
+
+```vue
+<!--
+ * @Author: Chengya
+ * @Description: Description
+ * @Date: 2024-12-13 11:16:17
+ * @LastEditors: Chengya
+ * @LastEditTime: 2024-12-13 13:31:17
+-->
+<template>
+  <div>
+    <h2>全局注册引用示例</h2>
+    <div class="btn_container">
+      <CyaButton @click="handler1">按钮1</CyaButton>
+      <CyaButton @click="handler1" type="primary">按钮1</CyaButton>
+      <CyaButton @click="handler1" type="danger">按钮1</CyaButton>
+      <CyaButton @click="handler1" :disabled="true">按钮1</CyaButton>
+      <CyaButton @click="handler1" :loading="true">按钮1</CyaButton>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    handler1() {
+      console.log("hello world 按钮1");
+    },
+  },
+};
+</script>
+
+<style scoped>
+.btn_container {
+  display: flex;
+  justify-content: center;
+}
+</style>
+```
+
+### 使用方式二：配置按需加载
+
+#### 项目根目录下修改 babel.config.js 的配置 如下
+
+```js
+module.exports = {
+  presets: ["@vue/cli-plugin-babel/preset"],
+  plugins: [
+    [
+      "babel-plugin-import",
+      {
+        libraryName: "cyaui", // 组件库名称
+        libraryDirectory: "dist", // 组件主目录
+        camel2DashComponentName: false, // 驼峰转短横线
+        style: (name) => {
+          const componentName = name.split("/").pop(); // 获取组件名
+          return `cyaui/dist/${componentName}/${componentName}.css`;
+        },
+      },
+    ],
+  ],
+};
+```
+
+#### 按需加载使用示例
+
+```vue
+<!--
+ * @Author: Chengya
+ * @Description: Description
+ * @Date: 2024-12-11 13:26:56
+ * @LastEditors: Chengya
+ * @LastEditTime: 2025-01-17 17:07:47
+-->
+<template>
+  <div>
+    <h2>按需引用示例</h2>
+    <CyaButton @click="handler">按钮3</CyaButton>
+  </div>
+</template>
+<script>
+import { CyaButton } from "cyaui";
+export default {
+  components: {
+    CyaButton,
+  },
+  methods: {
+    handler() {
+      console.log("hello world 我是按钮3");
+    },
+  },
+};
+</script>
+<style></style>
+```
+
+#### 需要注意的是 如果配置了按需加载，然后又使用全局注册的方式的话，需要将 babel.config.js 配置的按需加载内容注释
+
+## 基础组件 Button API 说明
+
+<ClientOnly>
+  <Button></Button>
+
+<font size=5>组件属性</font>
+| 参数| 说明 | 类型 | 可选值 | 默认值 |
+| :------ | ------ | ------ | ------ | ------ |
+| type | 按钮类型 | string |default/primary/danger | default |
+| disabled | 按钮是否禁用 | boolean |true/false | false |
+| loading | 显示加载中图标 | boolean |true/false | false |
+</ClientOnly>

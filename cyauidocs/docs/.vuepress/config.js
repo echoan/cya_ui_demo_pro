@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-02-06 17:50:37
+ * @LastEditTime: 2025-05-17 17:03:21
  */
 module.exports = {
   base: "/cyaui/",
@@ -30,8 +30,8 @@ module.exports = {
     "/": {
       base: "/cyaui/",
       //lang: "zh-CN",
-      title: "cyaui",
-      description: "从0开始构建一个基于vue2.x的组件库",
+      title: "大橙子的笔记星球",
+      description: "前端学习、实践、总结记录",
     },
   },
   //主题配置
@@ -119,49 +119,44 @@ module.exports = {
         ],
         sidebar: [
           {
-            title: "开发指南",
-            collapsable: false,
+            title: "CSS相关",
+            collapsable: true,
             children: [
               {
-                title: "组件库创建",
+                title: "前端开发常用css总结",
                 collapsable: false,
-                path: "/zh/views/guide/create.md",
+                path: "/zh/views/guide/css.md",
               },
             ],
           },
           {
-            title: "使用指南",
-            collapsable: false,
+            title: "前端框架、组件库相关",
+            collapsable: true,
             children: [
               {
-                title: "安装",
+                title: "1.前端组件库的开发实践",
                 collapsable: false,
-                path: "/zh/views/guide/install.md",
-              },
-              {
-                title: "快速开始",
-                collapsable: false,
-                path: "/zh/views/guide/start.md",
+                path: "/zh/views/guide/framework.md",
               },
             ],
           },
-          {
-            title: "组件演示",
-            collapsable: false,
-            children: [
-              {
-                title: "基础组件",
-                collapsable: false,
-                children: [
-                  {
-                    title: "Button 按钮",
-                    collapsable: false,
-                    path: "/zh/views/components/Basic/Button.md",
-                  },
-                ],
-              },
-            ],
-          },
+          // {
+          //   title: "组件演示",
+          //   collapsable: false,
+          //   children: [
+          //     {
+          //       title: "基础组件",
+          //       collapsable: false,
+          //       children: [
+          //         {
+          //           title: "Button 按钮",
+          //           collapsable: false,
+          //           path: "/zh/views/components/Basic/Button.md",
+          //         },
+          //       ],
+          //     },
+          //   ],
+          // },
         ],
       },
     },
