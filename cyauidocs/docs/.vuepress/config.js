@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-05-17 17:03:21
+ * @LastEditTime: 2025-05-25 16:51:35
  */
 module.exports = {
   base: "/cyaui/",
@@ -137,6 +137,11 @@ module.exports = {
                 title: "1.前端组件库的开发实践",
                 collapsable: false,
                 path: "/zh/views/guide/framework.md",
+              },
+              {
+                title: "2.React相关",
+                collapsable: false,
+                path: "/zh/views/guide/react.md",
               },
             ],
           },
