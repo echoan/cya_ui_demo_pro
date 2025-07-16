@@ -3,10 +3,731 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-05-25 17:58:12
+ * @LastEditTime: 2025-07-16 18:01:54
 -->
 
 # React 相关内容
+
+## React 基础内容
+
+### React 语法
+
+#### 1.React 中创建虚拟 dom 的最基本的代码
+
+```jsx
+//引入react包
+import React from "react";
+import ReactDom from "react-dom";
+// 创建虚拟dom
+const myDom = React.createElement("h1", { id: "Box" }, "我是一个h1标签");
+ReactDom.render(myDom, document.getElementById("app"));
+//这样创建虚拟dom比较麻烦，我们希望以一种写html的方式来快速的创建虚拟dom，这就需要使用jsx语法，并配合babel来使用
+```
+
+#### 2.React 中使用 jsx 语法来创建虚拟 dom
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+//使用jsx语法在js中以一种写html语言的方式来创建虚拟dom效率更高
+const myDom = (
+  <div id="Box">
+    我是jsx语法创建的dom
+    <h2>我是一个h2标签</h2>
+  </div>
+);
+
+//调用ReactDom.render来将虚拟dom挂载到页面
+ReactDom.render(myDom, document.getElementById("app"));
+```
+
+#### 3.React 中 jsx 语法的基本使用
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+
+const a = 100;
+const strone = "香港是中国的一部分";
+const flag = true;
+const title = "flower";
+const hh1 = <div>大家好我是div</div>;
+const arrone = [
+  <h3>肯巴沃克</h3>,
+  <h3>马库斯斯玛特</h3>,
+  <h3>杰森塔图姆</h3>,
+  <h3>杰伦布朗</h3>,
+];
+const arrtwo = ["大连", "北京", "济南", "青岛"];
+const cityarr = [];
+//forEach方法
+arrtwo.forEach((item) => {
+  const temp = <p key={item}>{item}</p>;
+  cityarr.push(temp);
+});
+//map方法
+const cityarrtwo = arrtwo.map((item) => {
+  return <p key={item}>{item}</p>;
+});
+ReactDom.render(
+  <div>
+    {/*渲染数字*/}
+    {a + 100}
+    <hr />
+    {/*渲染字符串*/}
+    {strone}
+    <hr />
+    {/*渲染布尔值*/}
+    {flag ? "yes" : "no"}
+    <hr />
+    {/*为属性添加属性值*/}
+    <p title={title}>{title}</p>
+    <hr />
+    {/*渲染jsx语法*/}
+    {hh1}
+    {/*渲染jsx元素数组因为这里没有加key所以会有警告*/}
+    {arrone}
+    {/*forEach方法构建的cityarr*/}
+    {cityarr}
+    {/*map方法构建的cityarrtwo*/}
+    {cityarrtwo}
+    {/*将普通的字符串数组转化为jsx数组并且渲染到页面上*/}
+    {arrtwo.map((item) => (
+      <h3 key={item} className={item}>
+        {item}
+      </h3>
+    ))}
+    <label htmlFor={a}>label标签中用htmlFor来替换label的for</label>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+#### 4.React 中最基本传参
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+//引入创建的Helloword组件
+import Helloword from "./components/Helloword.jsx";
+//构造函数创建组件
+// function Helloword(props){
+//     console.log(props);
+//     //props.age = 100;
+//     //console.log(props);//props只读无法修改
+//     return <div>我是一个构造函数创建出来的组件,我的名字叫{props.name} 我的年龄是{props.age}岁</div>
+// }
+const obj = {
+  name: "Tom",
+  age: "30",
+};
+//解构的使用
+const objone = {
+  name: "cat",
+  age: 30,
+};
+const objtwo = {
+  sex: "male",
+  ...objone,
+};
+console.log(objtwo);
+ReactDom.render(
+  <div>
+    {/* 直接把创建的组件的名称 以标签的形式 放在页面即可使用 */}
+    <Helloword name={obj.name} age={obj.age}></Helloword>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+##### HelloWorld 组件
+
+```jsx
+import React from "react";
+//将index.js中创建的一个组件抽离为一个单独的文件
+function Helloword(props) {
+  return (
+    <div>
+      我是一个构造函数创建出来的组件,我的名字叫{props.name} 我的年龄是
+      {props.age}岁
+    </div>
+  );
+}
+//将组件文件导出
+export default Helloword;
+```
+
+#### 5.class 关键字的使用
+
+```jsx
+//console.log('123')
+//构造函数创建一个类
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+const p1 = new Person("tom", 25);
+//直接挂载到构造函数的属性，称为静态属性
+Person.info = "这是一个人的类";
+console.log(p1);
+//通过new出来的实例访问到的属性，称为实例属性
+console.log(p1.name);
+console.log(p1.age);
+//访问静态属性不能通过实例，要通过构造函数
+console.log(p1.info); //undefined
+console.log(Person.info);
+
+//分割线
+console.log("---------------------------------------------");
+//使用class关键字创建类
+class Animal {
+  //constructor是类的构造器 每一个类中都有一个构造器，如果没有人为指定构造器的话，那么类内部的构造器可以认为是个空构造器 constructor(){}
+  //构造器的作用，当执行new一个实例的时候，必然优先执行构造器中的代码
+  constructor(name, age) {
+    //实例属性
+    this.name = name;
+    this.age = age;
+  }
+  //在class内部创建静态属性，使用static关键字
+  static info = "这是一个动物的类";
+}
+const animal1 = new Animal("旺财", 2);
+console.log(animal1);
+console.log(animal1.name);
+console.log(animal1.age);
+//访问静态属性同样要通过类
+console.log(animal1.info); //undefined
+console.log(Animal.info);
+```
+
+#### 6.class 类的实例方法和静态方法
+
+```jsx
+function Person(name, age) {
+  //实例属性
+  this.name = name;
+  this.age = age;
+}
+//静态属性
+Person.info = "这是个人的类";
+
+//添加一个实例方法
+Person.prototype.say = function () {
+  console.log("你好");
+};
+//添加一个静态方法
+Person.show = function () {
+  console.log("这是静态方法");
+};
+const p1 = new Person("tom", 20);
+console.log(p1);
+p1.say(); //调用实例方法
+//p1.show();//报错
+Person.show(); //调用静态方法
+
+console.log("---------------------------------------------------");
+//class创建类
+
+class Animal {
+  constructor(name, age) {
+    //实例属性
+    this.name = name;
+    this.age = age;
+  }
+  //静态属性
+  static info = "这是动物类";
+  //添加实例方法
+  say() {
+    console.log("动物类的实例方法");
+  }
+  //添加静态方法
+  static show() {
+    console.log("这是动物类的静态方法");
+  }
+}
+const animal1 = new Animal("阿黄", 3);
+console.log(animal1);
+//调用实例方法
+animal1.say();
+//调用静态方法
+Animal.show();
+```
+
+#### 7.class 类的继承
+
+```jsx
+//为类American和Chinese创建一个父类这里可以将其视为该两个类的原型对象 prototype
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  //添加实例方法
+  say() {
+    console.log("你好");
+  }
+}
+
+//创建一个美国人的类
+//class类中，可以使用extends实现子类继承父类 语法 class 子类 extends 父类 {}
+class American extends Person {}
+const A1 = new American("jack", 25);
+console.log(A1);
+A1.say();
+
+//创建一个中国人的类
+class Chinese extends Person {
+  //如果此时不定义该类的construntor,那么该类的constructor其实就是父类的constructor,如果此处定义该类的constructor，那么需要使用函数super()
+  constructor(name, age, IDcard) {
+    super(name, age);
+    this.IDcard = IDcard;
+  }
+  move() {
+    console.log("教练，我要打篮球");
+  }
+  /*3个问题
+  1.为什么要在constructor中使用super()？如果一个子类通过extends关键字继承父类，那么在该子类自定义constructor时，必须先调用super;
+  2.super是什么？ super是一个函数，其本质是父类的构造器，子类的super()其实是父类构造器constructor在子类的引用。
+  3.调用了super后参数的传递？在定义类的constructor时可以为该类添加有别于父类实例属性的，并且仅属于该类的实例属性（比如该例下的IDcard属性），但是为了保证同样拥有父类定义的实例属性，需要传必要的参数，如这里传递的name,age，否则对应属性就是undefined.
+  */
+}
+const C1 = new Chinese("林书豪", 30, 375435199389987654);
+console.log(C1);
+C1.say();
+C1.move();
+```
+
+#### 8.使用 class 类来创建一个 React 的组件(类组件)
+
+```jsx
+import React from "react";
+//以上等同于 import React,{Component} from 'react'
+import ReactDom from "react-dom";
+
+//class创建一个组件
+class Onecomponent extends React.Component {
+  constructor() {
+    super();
+  }
+  //render函数用来渲染当前组件对应的虚拟Dom元素
+  render() {
+    //return null
+    return <div>我是第一个用class类创建出来的react组件</div>;
+  }
+}
+
+//调用ReactDom render函数来渲染
+ReactDom.render(
+  <div>
+    <Onecomponent></Onecomponent>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+#### 9.class 创建的组件的传参以及私有数据
+
+```jsx
+import React from "react";
+//以上等同于 import React,{Component} from 'react'
+import ReactDom from "react-dom";
+//class创建一个组件
+class Onecomponent extends React.Component {
+  constructor() {
+    super();
+    //this.state在这里就相当于vue中的data(){return{}}
+    this.state = {
+      message: "我是class关键字创建的组件的私有数据",
+    };
+  }
+  //render函数用来渲染当前组件对应的虚拟Dom元素
+  render() {
+    //return null
+    //this.props.name = 'jack' 试图修改props的属性 会报错 。无论是使用class关键字创建的组件还是使用构造函数创建的组件 props都是只读的不可修改其属性。
+    //class创建的组件的私有数据是可以被修改的，它是可读可写的
+    this.state.message = "我被修改了";
+    //class关键字创建的组件在使用外界的参数时，不需要接受，直接使用this.props.属性名即可访问，this代表的是当前组件创建的实例对象
+    return (
+      <div>
+        我是第一个用class类创建出来的react组件---{this.props.name}-----
+        {this.props.age}------{this.state.message}
+      </div>
+    );
+  }
+}
+const user = {
+  name: "tom",
+  age: 20,
+};
+//调用ReactDom render函数来渲染
+ReactDom.render(
+  <div>
+    <Onecomponent {...user}></Onecomponent>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+#### 10.使用 class 关键字创建一个列表组件
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+
+class Pinglun extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      TextList: [
+        { id: 0, name: "张三", words: "哈哈,沙发" },
+        { id: 1, name: "李四", words: "啦啦,板凳" },
+        { id: 2, name: "王五", words: "哈哈,凉席" },
+        { id: 3, name: "赵六", words: "哈哈,砖头" },
+        { id: 4, name: "田七", words: "哈哈,楼下山炮" },
+      ],
+    };
+  }
+  render() {
+    return (
+      <div>
+        <h3>这是一个评论列表</h3>
+        {this.state.TextList.map((item) => (
+          <div key={item.id}>
+            <h2>评论人：{item.name}</h2>
+            <p>评论内容：{item.words}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+ReactDom.render(
+  <div>
+    <Pinglun></Pinglun>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+#### 11.对以上列表组件的抽离
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+//构造函数创建一个无状态组件应用于评论列表（组件的嵌套）
+function Getpinglun(props) {
+  return (
+    <div>
+      <h2>评论人：{props.name}</h2>
+      <p>评论内容：{props.words}</p>
+    </div>
+  );
+}
+class Pinglun extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      TextList: [
+        { id: 0, name: "张三", words: "哈哈,沙发" },
+        { id: 1, name: "李四", words: "啦啦,板凳" },
+        { id: 2, name: "王五", words: "哈哈,凉席" },
+        { id: 3, name: "赵六", words: "哈哈,砖头" },
+        { id: 4, name: "田七", words: "哈哈,楼下山炮" },
+      ],
+    };
+  }
+  render() {
+    return (
+      <div>
+        <h3>这是一个评论列表</h3>
+        {this.state.TextList.map((item) => (
+          <Getpinglun {...item} key={item.id}></Getpinglun>
+        ))}
+      </div>
+    );
+  }
+}
+ReactDom.render(
+  <div>
+    <Pinglun></Pinglun>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+#### 12. React 中 事件的绑定
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+
+import BindEvent from "@/components/BindEvent";
+
+ReactDom.render(
+  <div>
+    <BindEvent></BindEvent>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+##### BindEvent 组件内容
+
+```jsx
+import React from "react";
+export default class BindEvent extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        我是BindEvent组件
+        <hr />
+        {/* 在react中有一套自己的事件绑定机制，事件名小驼峰命名，参数必须为一个函数*/}
+        <button
+          onClick={function () {
+            console.log("我是react当中的点击事件");
+          }}
+        >
+          onclick点击
+        </button>
+        <hr />
+        <button
+          onMouseOver={function () {
+            console.log("我是react当中的onmouseover事件");
+          }}
+        >
+          onmouseover事件
+        </button>
+        <hr />
+        <button
+          onMouseMove={function () {
+            console.log("我是react当中的onmousemove事件");
+          }}
+        >
+          onmousemove事件
+        </button>
+        <hr />
+        {/* 调用该实例对象下的clickEvent方法，点击才会执行 */}
+        <button onClick={this.clickEvent}>点击</button>
+        <hr />
+        {/* 调用该实例对象下的clickEvent方法，初始化时就执行一次 */}
+        <button onClick={this.clickEvent()}>点击</button>
+        <hr />
+        {/* react中绑定事件常用方式（箭头函数） 箭头函数内部，this指向外部环境的this，因此这里的this指向的是该实例 */}
+        <button
+          onClick={() => {
+            this.clickEvent();
+          }}
+        >
+          点击
+        </button>
+      </div>
+    );
+  }
+  // clickEvent(){
+  //     console.log('哈哈哈哈哈')
+  // }
+  //将clickEvent改变为一个箭头函数
+  clickEvent = () => {
+    console.log("哈哈哈哈");
+  };
+}
+```
+
+#### 12.React 中修改组件实例的私有属性以及注意事项
+
+```jsx
+import React from "react";
+
+export default class BindEventTwo extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      message: "哈哈哈哈哈",
+      name: "tom",
+      age: 20,
+    };
+  }
+  render() {
+    return (
+      <div>
+        <button
+          onClick={() => {
+            this.changeState(1, 2);
+          }}
+        >
+          点击按钮修改state的message
+        </button>
+        <p>{this.state.message}</p>
+      </div>
+    );
+  }
+  changeState = (n1, n2) => {
+    //这里的n1,n2是接收的调用该方法时的参数
+    //在react，想要修改或者为state重新赋值，不能使用this.state.xxxx = 值的方式，应该调用react提供的this.setState({属性:值})的方式
+    this.setState(
+      {
+        message: "我被修改了" + n1 + n2,
+      },
+      function () {
+        //修改状态值后的回调
+        console.log(this.state.message);
+      }
+    );
+    console.log(this.state.message);
+    //在React中推荐使用this.setState({})来修改状态值，并且在setState中，只会把对应的state状态更新，而不会覆盖其他的state状态
+    //另外this.setState是一个异步的操作，所以在通过这种方式修改state后，如果希望第一时间得到修改过后的状态值，需要在this.setState({},callback)执行回调函数callback这里获取
+  };
+}
+```
+
+#### 13.模拟 Vue 在 React 中实现数据的双向绑定
+
+```jsx
+import React from "react";
+
+export default class BindEventThree extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      message: "哈哈哈哈哈",
+      name: "tom",
+    };
+  }
+  render() {
+    return (
+      <div>
+        <button
+          onClick={() => {
+            this.changeState();
+          }}
+        >
+          点击按钮修改state的message
+        </button>
+        <p>{this.state.message}</p>
+        {/* react中当为input绑定value值后，必须要做的事情，要么为input 添加readOnly属性，要么为input添加onChange处理事件 */}
+        {/* <input type="text" style={{width:'100%'}} value={this.state.message} readOnly /> */}
+        <input
+          type="text"
+          style={{ width: "100%" }}
+          value={this.state.message}
+          onChange={(e) => {
+            this.textChange(e);
+          }}
+          ref="txt"
+        />
+      </div>
+    );
+  }
+
+  //每当文本框的内容变化，自然会调用该事件
+  textChange = (e) => {
+    //onChange事件中用于获取文本框的值有两种方案
+    //方案1、通过参数e来获取
+    console.log(e.target.value);
+    //方案2、通过refs来获取
+    console.log(this.refs.txt.value);
+    const newValues = e.target.value;
+    this.setState({
+      message: newValues,
+    });
+  };
+  changeState = () => {
+    this.setState(
+      {
+        message: "啦啦啦啦啦啦",
+      },
+      console.log("我其实应该是一个回调函数")
+    );
+  };
+}
+```
+
+#### 14.React 中 通过 static defaultProps 来为组件接受的某个属性设置默认值
+
+```jsx
+/*
+ * @Author: Chengya
+ * @Description: Description
+ * @Date: 2019-10-30 17:00:24
+ * @LastEditors: Chengya
+ * @LastEditTime: 2025-07-16 17:50:30
+ */
+import React from "react";
+
+export default class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  //在封装一些组件的时候，组件内部肯定有一些数据是必须的，哪怕用户并没有传递一些相关的启动参数，这个时候在组件的内部，尽量给自己提供一个默认值
+  //在组件中通过static defaultProps来为组件设置默认属性值
+  static defaultProps = {
+    oneCount: 10,
+    //设置默认属性值之后，如果外界没有传递相关参数，那么设置的该属性值在组件初始化的时候就会派上用场，当有相关参数传递的时候，那么外界传递的参数就会替代该设置的默认值。
+  };
+  render() {
+    return (
+      <div>
+        <h3>这是一个Counter计数器组件</h3>
+        <button>点击+1</button>
+        <hr />
+        <h3>当前的数量是{this.props.oneCount}</h3>
+      </div>
+    );
+  }
+}
+```
+
+#### 15.React 中 通过 static propTypes 对组件接受的某个属性的类型进行约束和校验
+
+```jsx
+/*
+ * @Author: Chengya
+ * @Description: Description
+ * @Date: 2019-10-30 17:00:24
+ * @LastEditors: Chengya
+ * @LastEditTime: 2025-07-16 17:55:44
+ */
+import React from "react";
+//导入参数传递校验的模块
+import dataRules from "prop-types";
+
+export default class CounterTwo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  //在封装一些组件的时候，组件内部肯定有一些数据是必须的，哪怕用户并没有传递一些相关的启动参数，这个时候在组件的内部，尽量给自己提供一个默认值
+  //在组件中通过static defaultProps来为组件设置默认属性值
+  static defaultProps = {
+    oneCount: 10,
+    //设置默认属性值之后，如果外界没有传递相关参数，那么设置的该属性值在组件初始化的时候就会派上用场，当有相关参数传递的时候，那么外界传递的参数就会替代该设置的默认值。
+  };
+
+  //封装组件的目的是为了方便高效的开发,在封装组件的时候通常会为组件的一些必要数据进行校验，保证传递的参数是符合要求的，如果不符合要求，就在控制台给出警告。
+
+  //React中通常会使用static propTypes对象对于外界传递的参数做类型校验，在React15的版本之前，prop-types并没有从React中抽离出来，在15的版本之后，才从React中抽离了出来，作为单独的一部分。
+  //也就是说，在React15的版本之前，不需要安装该模块，可以直接使用，但是在15版本之后，需要手动安装，才可以使用。 npm install prop-types
+  static propTypes = {
+    //定义该组件传递的参数类型为number类型
+    oneCount: dataRules.number,
+  };
+  render() {
+    return (
+      <div>
+        <h3>这是一个Counter计数器组件</h3>
+        <button>点击+1</button>
+        <hr />
+        <h3>当前的数量是{this.props.oneCount}</h3>
+      </div>
+    );
+  }
+}
+```
 
 ## tsx 中创建组件的方式
 
