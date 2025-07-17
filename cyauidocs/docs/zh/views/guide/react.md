@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-07-16 18:01:54
+ * @LastEditTime: 2025-07-17 18:13:11
 -->
 
 # React 相关内容
@@ -725,6 +725,273 @@ export default class CounterTwo extends React.Component {
         <h3>当前的数量是{this.props.oneCount}</h3>
       </div>
     );
+  }
+}
+```
+
+#### 16.React 类组件的生命周期中 组件创建阶段的生命周期函数
+
+```jsx
+import React from "react";
+//导入参数传递校验的模块
+import dataRules from "prop-types";
+
+export default class CounterThree extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: "hello",
+      //将props.oneCount赋值给state中的一个属性
+      count: props.oneCount,
+    };
+  }
+  static defaultProps = {
+    oneCount: 10,
+  };
+  static propTypes = {
+    oneCount: dataRules.number,
+  };
+  //componentWillMount 组件将要挂载到页面时触发该函数,此时组件还没有挂载到页面上
+  //而且内存中，虚拟的Dom结构还没有被创建出来，但是初始化时的默认属性和this.state的属性是可以在函数中访问到的，可以调用组件中定义的方法
+  UNSAFE_componentWillMount() {
+    console.log(document.getElementById("oneDom")); //null 此时虚拟dom还未创建
+    console.log(this.props.oneCount); //100
+    console.log(this.state.message); //hello
+    this.oneMethod(); //我是oneMethod方法
+  }
+  render() {
+    console.log(document.getElementById("oneDom"));
+    console.log("-------------------");
+    //在return之前 虚拟Dom还未创建完成，页面是空的，拿不到任何元素
+    return (
+      <div>
+        <h3 id="oneDom">这是一个Counter计数器组件</h3>
+        <button id="btn" onClick={() => this.changeData()}>
+          点击+1
+        </button>
+        <hr />
+        <h3>当前的数量是{this.state.count}</h3>
+      </div>
+    );
+    //return 执行完毕之后，虚拟Dom结构已经创建完，但还没有挂载到页面上
+  }
+  componentDidMount() {
+    //该阶段类比Vue中生命周期的mounted
+    //如果我们想操作dom元素，最早可以在该阶段去操作
+    console.log(document.getElementById("oneDom"));
+
+    // document.getElementById('btn').onclick = ()=>{
+    //     // console.log('原生js在react绑定的事件')
+    //     this.setState({
+    //         count:this.state.count+1
+    //     })
+    // }
+  }
+  oneMethod() {
+    console.log("我是oneMethod方法");
+  }
+  changeData = () => {
+    this.setState({
+      count: this.state.count + 1,
+    });
+  };
+}
+```
+
+#### 17. React 类组件的生命周期中 组件运行阶段的生命周期函数
+
+```jsx
+import React from "react";
+//导入参数传递校验的模块
+import dataRules from "prop-types";
+
+export default class CounterThree extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: "hello",
+      count: props.oneCount,
+    };
+  }
+  static defaultProps = {
+    oneCount: 10,
+  };
+  static propTypes = {
+    oneCount: dataRules.number,
+  };
+  UNSAFE_componentWillMount() {
+    console.log(document.getElementById("oneDom")); //null 此时虚拟dom还未创建
+    console.log(this.props.oneCount); //100
+    console.log(this.state.message); //hello
+    this.oneMethod(); //我是oneMethod方法
+  }
+  render() {
+    //在组件运行阶段，componentWillUpdate()过后还会再次调用render()函数，在render()执行完毕之前，页面上的dom还是旧的。
+    console.log(
+      this.refs.h3 &&
+        this.refs.h3.innerHTML + "--------------运行阶段调用render()时"
+    );
+
+    return (
+      <div>
+        <h3 id="oneDom">这是一个Counter计数器组件</h3>
+        <button id="btn" onClick={() => this.changeData()}>
+          点击+1
+        </button>
+        <hr />
+        <h3 ref="h3">当前的数量是{this.state.count}</h3>
+      </div>
+    );
+  }
+  componentDidMount() {
+    console.log(document.getElementById("oneDom"));
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    //shouldComponentUpdate()判断组件是否需要更新 返回布尔值 返回true则会调用render()重新渲染页面，之后数据和页面都是最新的
+    //如果返回false，不会执行后续的生命周期函数，render()函数也不会调用，将会继续返回组件的运行中的状态，数据得到更新，组件的state状态会被修改，但是页面并没有重新渲染，是旧的。
+    //在该组件中，通过this.state.count拿到的属性值是旧的，并不是最新的，在这里可以通过nextProps和nextState去获取到对应的最新的属性值
+    // return this.state.count%2?false:true
+    return nextState.count % 2 ? false : true;
+    //只有偶数时才更新页面
+  }
+  //组件将要更新阶段的状态，在该状态下，内存中的虚拟dom和页面上的dom还都是旧的，所以在该阶段要谨慎操作dom，因为很可能只是操作的旧的Dom
+  componentWillUpdate() {
+    console.log(this.refs.h3.innerHTML + "---------------componentWillUpdate");
+    //打印出来的是旧dom的innerHTML
+  }
+  //组件完成了更新的状态，在该状态下，数据和内存中的虚拟dom以及页面上的dom都是最新的，此时可以放心大胆的去操作dom
+  componentDidUpdate() {
+    console.log(this.refs.h3.innerHTML + "---------------componentDidUpdate");
+  }
+  oneMethod() {
+    console.log("我是oneMethod方法");
+  }
+  changeData = () => {
+    this.setState({
+      count: this.state.count + 1,
+    });
+  };
+}
+```
+
+#### 18.React 中 类组件的生命周期中 组件运行阶段的生命周期函数 componentWillReceiveProps 的示例
+
+```jsx
+import React from "react";
+import DataTypes from "prop-types";
+
+export default class CounterFive extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: "我是子组件",
+    };
+  }
+  render() {
+    return (
+      <div>
+        <h3>我是父组件</h3>
+        <button onClick={() => this.changeData()}>点击改变数据</button>
+        <hr />
+        <Son msg={this.state.message} oneCount={100}></Son>
+      </div>
+    );
+  }
+  changeData = () => {
+    this.setState({
+      message: "哈哈哈，哈哈哈",
+    });
+  };
+}
+class Son extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  static defaultProps = {
+    oneCount: 10,
+  };
+  static propTypes = {
+    oneCount: DataTypes.number,
+  };
+  render() {
+    return (
+      <div>
+        <h5>{this.props.msg}</h5>
+        <p>{this.props.oneCount}</p>
+      </div>
+    );
+  }
+  //第一次渲染时是不会触发该状态的，在传递的参数被修改后才会触发
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    //想要获得最新的属性值，要通过其参数列表来获取
+    console.log(this.props.msg + "------" + nextProps.msg);
+    //我是子组件 -------哈哈哈，哈哈哈
+  }
+}
+```
+
+#### 19.React 中 类组件卸载阶段的生命周期函数 componentWillUnMount
+
+```text
+React类组件卸载阶段 只有一个卸载相关的生命周期钩子 componentWillUnMount.
+可以在这里执行清理操作，比如清除定时器、取消网络请求、取消订阅等。
+```
+
+#### 20. React 类组件中绑定 this 并传参的三种方式
+
+```jsx
+import React from "react";
+import DataTypes from "prop-types";
+
+export default class CounterSix extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: "绑定this并传参的几种方式",
+      datamsg: "我是数据",
+    };
+    //绑定this并传参的方式二:在构造函数中绑定并传参
+    //当为一个函数绑定bind,改变this的指向后，bind函数调用的结果，有一个返回值，这个返回值是改变this指向的函数的引用
+    this.changedata2 = this.changedata2.bind(this, 1000, 2000);
+  }
+  render() {
+    return (
+      <div>
+        <h3>{this.state.message}</h3>
+        {/* bind的作用，为前面的函数，修改函数内部的this指向，让函数内部的this指向bind参数列表中的第一个参数。
+            bind和call和apply之间的区别
+            call和apply在修改完this的指向后会立即调用前面的函数
+            但是bind不会立即调用。bind参数列表中的第一个参数是用来修改this指向的，之后的参数，会被当做将来调用前面的函数的参数传递进去。 */}
+        <button onClick={this.changedata.bind(this, 100, 200)}>
+          绑定this并传参的方式一
+        </button>
+        <hr />
+        <button onClick={this.changedata2}>绑定this并传参的方式二</button>
+        <hr />
+        <button onClick={() => this.changedata3(200, 500)}>
+          绑定this并传参的方式三
+        </button>
+        <hr />
+        <p>{this.state.datamsg}</p>
+      </div>
+    );
+  }
+  //值的注意的是，因为上面绑定处理方法的时候，使用了bind，所以这里可以不再使用箭头函数。
+  changedata(num1, num2) {
+    this.setState({
+      datamsg: "我被改变了" + num1 + num2,
+    });
+  }
+  changedata2(num1, num2) {
+    this.setState({
+      datamsg: "我被改变了" + num1 + num2,
+    });
+  }
+  changedata3(num1, num2) {
+    this.setState({
+      datamsg: "我被改变了" + num1 + num2,
+    });
   }
 }
 ```
