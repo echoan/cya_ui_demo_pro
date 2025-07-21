@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-07-17 18:13:11
+ * @LastEditTime: 2025-07-21 13:43:45
 -->
 
 # React 相关内容
@@ -992,6 +992,241 @@ export default class CounterSix extends React.Component {
     this.setState({
       datamsg: "我被改变了" + num1 + num2,
     });
+  }
+}
+```
+
+#### 21.使用 react 类组件 创建的一个评论列表的实例
+
+```jsx
+import React from "react";
+import Plitem from "@/components/Plitem";
+import Sendpl from "@/components/Sendpl";
+export default class PList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [
+        { id: 0, name: "tom", words: "hello" },
+        { id: 1, name: "jack", words: "world" },
+        { id: 2, name: "cat", words: "byebye" },
+      ],
+    };
+  }
+  render() {
+    return (
+      <div>
+        {/* 评论标题 */}
+        <h3>评论列表</h3>
+
+        {/* 发表评论组件 */}
+        {/* 在react中传递给组件数据或者方法都可以使用this.props.属性（或者方法名）来调用 ，这与Vue中数据传递使用props，方法传递使用this.$emit(方法名)是有不同的*/}
+        {/* 在该组件点击发表评论时应该再一次调用UNSAFE_componentWillMount中执行的方法getPL()，刷新评论列表 */}
+        <Sendpl reloadlist={this.getPL}></Sendpl>
+
+        {/* 评论列表组件 */}
+        {this.state.list.map((item) => {
+          return <Plitem {...item} key={item.name}></Plitem>;
+        })}
+      </div>
+    );
+  }
+  //获取评论数组
+  getPL = () => {
+    var getpl = JSON.parse(localStorage.getItem("lists") || "[]");
+    this.setState({
+      list: getpl,
+    });
+  };
+  //虚拟Dom挂载到页面之前调用getPL该方法，从本地取出数据替换掉之前的假数据
+  UNSAFE_componentWillMount() {
+    this.getPL();
+  }
+}
+```
+
+##### 以上例子中发表评论的组件 Sendpl
+
+```jsx
+import React from "react";
+export default class Sendpl extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <label htmlFor="pinglunren">评论人</label>
+        <br />
+        <input type="text" name="pinglunren" ref="pinglunren" />
+        <br />
+        <label htmlFor="contentBox">评论内容</label>
+        <br />
+        <textarea
+          name="contentBox"
+          id="contentBox"
+          cols="30"
+          rows="10"
+          ref="contentBox"
+        ></textarea>
+        <button onClick={() => this.Addpl()}>发表评论</button>
+      </div>
+    );
+  }
+  Addpl = () => {
+    //1、获取评论人和评论内容
+    //2、从本地存储中获取获取之前的评论数组
+    //3、把最新的评论人和评论内容放到数组中
+    //4、把最新的数组存储在本地并清空相关区域
+    const content = {
+      name: this.refs.pinglunren.value,
+      words: this.refs.contentBox.value,
+    };
+    const pllist = JSON.parse(localStorage.getItem("lists") || "[]");
+    pllist.unshift(content);
+    localStorage.setItem("lists", JSON.stringify(pllist));
+    console.log(localStorage.getItem("lists"));
+    this.refs.pinglunren.value = this.refs.contentBox.value = "";
+    //调用传递的getPL方法刷新评论列表
+    this.props.reloadlist();
+  };
+}
+```
+
+##### 以上例子中 评论列表展示组件
+
+```jsx
+import React from "react";
+export default class Plitem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div style={{ border: "1px solid #ccc", margin: "15px 0" }}>
+        <h3>评论人：{this.props.name}</h3>
+        <p>评论内容：{this.props.words}</p>
+      </div>
+    );
+  }
+}
+```
+
+#### 22.React 中使用 context 来实现父子/父孙组件之间的数据的共享和传递
+
+```jsx
+import React from "react";
+export default class Father extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      color: "red",
+    };
+  }
+  render() {
+    return (
+      <div>
+        <h2>我是父组件</h2>
+        <Son color={this.state.color}></Son>
+      </div>
+    );
+  }
+}
+class Son extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <h4>我是子组件</h4>
+        <Grandson color={this.props.color}></Grandson>
+      </div>
+    );
+  }
+}
+class Grandson extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div style={{ color: this.props.color }}>
+        <h5>我是孙子组件</h5>
+      </div>
+    );
+  }
+}
+```
+
+##### 以上案例,孙组件如果想用到父组件的 state 里的值，是经过了多次传导才得到的，而且子组件并没有使用该值，但是也参与了其中，这样子看上去过于繁琐，所以为了避免有时候出现这种状况，可以使用 react 中的 Context 的属性。
+
+```jsx
+/*使用context来实现父孙组件间的数据传递和共享*/
+import React from "react";
+import ReactTypes from "prop-types";
+export default class Father extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      color: "red",
+    };
+  }
+  // react中Context的使用
+  //1、在父组件中，创建一个function，它有个固定的名称,getChildContext,这个方法内部返回一个对象，将需要共享给其他子组件的数据包含在其中。
+  //2、需要使用属性校验，规定共享给子组件的数据的类型,childContextTypes
+  getChildContext() {
+    return {
+      color: this.state.color,
+    };
+  }
+  static childContextTypes = {
+    color: ReactTypes.string,
+  };
+  render() {
+    return (
+      <div>
+        <h2>我是父组件</h2>
+        <Son></Son>
+      </div>
+    );
+  }
+}
+class Son extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <h4>我是子组件</h4>
+        <Grandson></Grandson>
+      </div>
+    );
+  }
+}
+class Grandson extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  //使用父组件共享的数据时同样也是必须先进行校验
+  static contextTypes = {
+    color: ReactTypes.string,
+  };
+  render() {
+    return (
+      <div>
+        <h5 style={{ color: this.context.color }}>
+          我是孙子组件----{this.context.color}
+        </h5>
+      </div>
+    );
   }
 }
 ```
