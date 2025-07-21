@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-07-21 13:43:45
+ * @LastEditTime: 2025-07-21 14:22:08
 -->
 
 # React 相关内容
@@ -1228,6 +1228,181 @@ class Grandson extends React.Component {
       </div>
     );
   }
+}
+```
+
+#### 23. React 中 路由的使用以及参数的传递
+
+```jsx
+/*
+ * @Author: chengya
+ * @Description: Modify here please
+ * @Date: 2022-03-18 14:10:37
+ * @LastEditors: chengya
+ * @LastEditTime: 2022-03-21 17:03:50
+ */
+import React from "react";
+import Home from "@/components/Home";
+import Movie from "@/components/Movie";
+import About from "@/components/About";
+
+//在react中使用路由需要安装路由模块 npm install react-router-dom -S,之后需要在主入口将其导入
+import { HashRouter, Route, Link } from "react-router-dom";
+//HashRouter表示路由的根容器，将来所有跟路由相关的内容都需要包裹在HashRouter里面，一个网站中只需要一个HashRouter就好
+//Route 路由规则，有两个重要的属性 path和component
+//Link表示路由的连接，相当于Vue中的<router-link-to=""></router-link>
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    //用HashRouter来包裹根组件, 为当前网站启用路由,在HashRouter中只能有唯一一个根元素，如此处的div
+    return (
+      <HashRouter>
+        <div>
+          <h3>我是网站App的根组件</h3>
+          <Link to="/">首页</Link>&nbsp;&nbsp;
+          <Link to="/movie/top100/5">电影</Link>&nbsp;&nbsp;
+          <Link to="/about">我的</Link>&nbsp;&nbsp;
+          <hr />
+          {/* 添加路由规则,path表示匹配的路由，component表示需要展示的组件*/}
+          {/* 在Vue中有<router-view></router-view>这样的路由标签，专门用来放匹配到的路由组件，在react中，没有router-view，而是直接使用Route标签来当做占位符。 */}
+          {/* react中的Route有两种身份，首先是路由规则，其次还是占位符 */}
+          {/* 默认情况下，react中的路由是模糊匹配的，如果路由可以部分匹配成功，就会展示这个路由对应的组件 */}
+          {/* 这里的exact是精确匹配的意思，比如我们有多层路由进行嵌套时，exact可以帮助我们精确匹配到你想跳转的路由。exact的值为bool型，为true是表示严格匹配，为false时为正常匹配 */}
+          {/* 在路由中想要传递参数可以在匹配规则中使用:修饰符，表示这个位置匹配到的是参数 */}
+          {/* 这里添加的replace的作用去除警告  Warning: Hash history cannot PUSH the same path; a new entry will not be added to the history stack */}
+          {/*使用常规方式*/}
+          <Route exact path="/" component={(props) => <Home {...props} />} />
+          <Route
+            exact
+            path="/movie/:type/:id"
+            component={(props) => <Movie {...props} />}
+          />
+          <Route path="/about" component={(props) => <About {...props} />} />
+          {/*使用常规方式*/}
+        </div>
+      </HashRouter>
+    );
+  }
+}
+```
+
+##### 以上实例中对应的各部分组件
+
+```jsx
+/*Home 组件*/
+import React from "react";
+import myhome from "./myhome";
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <h4>我是首页</h4>
+      </div>
+    );
+  }
+}
+/*Movie 组件*/
+import React from 'react';
+import mymovie from './mymovie.js';
+export default class Movie extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			routeParams: props.match.params
+		};
+	}
+	render() {
+		// 如果想要在路由规则中提取匹配的参数进行使用可以使用this.props.match.params来访问
+		console.log(this.props.match.params);
+		return (
+			<div>
+				<h4>
+					我是电影 参数为{this.state.routeParams.type}---{this.state.routeParams.id}{' '}
+				</h4>
+			</div>
+		);
+	}
+}
+ /*About 组件*/
+import React, { Component } from 'react';
+import myabout from './myabout.js';
+class About extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+	render() {
+		return (
+			<div>
+				<h4>这里是关于1</h4>
+			</div>
+		);
+	}
+}
+export default About;
+```
+
+#### 24. React 中使用组件库如 antd-design 并实现按需加载的配置
+
+```jsx
+import React from "react";
+import ReactDom from "react-dom";
+import Appone from "@/components/Appone";
+//导入Ant-Design的样式表
+// import 'antd/dist/antd.css'
+//如果在引用第三方框架的时候，像上面这样将整个css全部引入进来，虽然是可以的，但是打包之后的文件体积显得过大
+//有时候我们只引用了某个组件或者ui，那么这时再将整个的样式表全部引入就显得不是那么合适，所以可以通过配置将所需的样式按需自动加载
+//同时也避免了在主入口文件引入样式表
+
+//实现按需加载的方式
+//1、安装用于按需加载组件代码和样式的 babel 插件npm install babel-plugin-import
+//2、在.babellrc中的plugins中添加如下配置 ["import", { "libraryName": "antd", "style": "css" }]
+
+ReactDom.render(
+  <div>
+    <Appone></Appone>
+  </div>,
+  document.getElementById("app")
+);
+```
+
+##### Appone 组件
+
+```jsx
+import React from "react";
+import locale from "antd/es/date-picker/locale/zh_CN";
+import { DatePicker } from "antd";
+
+export default class Appone extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <h3>使用ant-design</h3>
+        <DatePicker locale={locale}></DatePicker>
+      </div>
+    );
+  }
+}
+```
+
+##### .babelrc 文件配置
+
+```js
+{
+"presets":["env","stage-0","react"],
+"plugins":["transform-runtime",["import", { "libraryName": "antd", "style": "css" }]]
 }
 ```
 
