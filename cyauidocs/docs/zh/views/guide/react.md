@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-07-21 14:22:08
+ * @LastEditTime: 2025-08-27 17:11:00
 -->
 
 # React 相关内容
@@ -1838,3 +1838,127 @@ export default function HocTest() {
   );
 }
 ```
+
+## React 中创建和使用单元测试用例
+
+### 推荐在 React 项目中使用 Jest 作为单元测试框架，并结合 React Testing Library 进行组件测试
+
+### 配置
+
+#### 1.添加配置文件 jest.config.js
+
+```js
+module.exports = {
+  testEnvironment: "jsdom", // 模拟浏览器环境，适用于 React
+  moduleFileExtensions: ["js", "jsx", "json", "node"], //Jest 在解析模块（import/require）时，会按这些扩展名去查找文件
+  testPathIgnorePatterns: ["/node_modules/", "/build/", "/config"], //忽略不需要测试的目录
+  transform: {
+    "^.+\\.jsx?$": "babel-jest", //使用 babel-jest 处理 JS/JSX
+  },
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy", //Jest 默认不支持解析非 JS 文件（如 .less、.css）,需要在 Jest 配置中添加 moduleNameMapper，让 Jest 遇到样式文件时用一个空模块来替代  需要 安装 identity-obj-proxy 依赖 npm install --save-dev identity-obj-proxy
+    "^@/(.*)$": "<rootDir>/src/$1", //路径别名（可选，项目里用到了 @/ 等特殊字符时使用）
+  },
+  // 覆盖率报告输出目录
+  coverageDirectory: "<rootDir>/coverage",
+  // 覆盖率报告格式：终端表格 + 浏览器可视化 + CI/CD 支持
+  coverageReporters: ["json", "lcov", "text", "html"],
+  // 收集覆盖率的文件范围（排除入口文件、配置文件）
+  collectCoverageFrom: [
+    "<rootDir>/src/**/*.{js,jsx}",
+    "!<rootDir>/src/main.js",
+    "!<rootDir>/src/routes/index.js",
+    "!**/node_modules/**",
+  ],
+  // 全局覆盖率阈值（不达标时测试失败）
+  coverageThreshold: {
+    global: {
+      branches: 80, // React 项目里分支多，可以先设置稍低
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
+  // 让输出干净一些（只显示关键结果）
+  silent: true,
+};
+```
+
+#### 2.在 src 或者根目录创建 Test 目录 用于存放将来创建的测试用例文件 如图
+
+![alt text](./image-1.png)
+
+#### 3. 安装依赖
+
+注意：安装 React Testing Library 的相关依赖 对于 node 版本是有要求的，node 版本要在 18.x 及以上；另外 @testing-library/react 要求 React 的版本要在 18 及以上。
+
+```js
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom babel-jest
+```
+
+比如 使用的 React 版本是 16.x 就需要安装兼容旧版 React 的测试库： 使用 12.x 版本的 @testing-library/react。
+
+```js
+npm install --save-dev jest @testing-library/react@12.1.5 @testing-library/jest-dom@5.16.5 babel-jest --legacy-peer-deps
+```
+
+注：npm install --legacy-peer-deps 的作用是忽略依赖冲突。
+默认情况下，npm v7 及以上会严格检查依赖树，如果有依赖冲突会直接报错（比如某个包要求 React 18，但你项目是 React 16）。
+加上 --legacy-peer-deps 参数后，npm 会忽略这些冲突，强制安装所有依赖（类似 npm v6 的行为），这样可以让老项目或有冲突的依赖顺利安装。
+
+#### 4. Test 目录下 创建 一个测试用例验证配置配置正确性
+
+```jsx
+import "@testing-library/jest-dom";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+
+// 示例组件
+function Hello() {
+  return <div>Hello, Jest!</div>;
+}
+
+// 测试用例
+test("渲染 Hello 组件并显示文本", () => {
+  render(<Hello />);
+  expect(screen.getByText("Hello, Jest!")).toBeInTheDocument();
+});
+
+/*
+React：用于渲染组件。
+render, screen：来自 @testing-library/react，用于测试组件的渲染和查询。
+render(<Hello />)：把 App 组件渲染到测试环境。
+screen.getByText(/Hello, Jest!/i)：查找页面上是否有文本内容包含 “Hello, Jest!”（不区分大小写）。
+expect(linkElement).toBeInTheDocument()：断言这个元素确实出现在页面中。
+这个测试用例用于验证Hello组件渲染后，页面上是否包含 “Hello, Jest!” 相关的文本。如果有，测试通过；没有，测试失败。这是 React 项目最常见的入门级测试写法。
+*/
+```
+
+##### 测试文件目录结构
+
+```
+test/
+└── unit/
+    ├── README.md                 # 文档说明
+    ├── simple.test.js            # 测试示例
+```
+
+#### 5. 运行命令
+
+```bash
+# 运行所有测试
+npm run test / npx jest  使用 npm test的话 需要在package.json 中 配置
+
+# 运行特定测试文件
+npm run test src/test/getDate.test.js / npx jest src/test/getDate.test.js
+
+# 生成覆盖率报告
+npx jest --coverage / npm run test:coverage      （需要package.json中配置好）
+
+npm run test:coverage 生成的覆盖率报告，默认是整个项目的覆盖率，也就是所有被测试文件（通常是 src 目录下的 JS/TS 文件）的覆盖率统计。
+
+```
+
+覆盖率报告反映的是被测试的源码文件被测试用例覆盖的比例，范围取决于你运行的测试文件。
+如果只运行某个测试文件（比如 npm test [getDate.test.js] -- --coverage），报告只统计该测试用例涉及到的源码文件的覆盖率。
+如果直接运行 npm run test:coverage，会统计所有测试用例对应的所有源码文件的覆盖率。
