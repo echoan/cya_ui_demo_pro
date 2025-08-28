@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-08-28 11:08:53
+ * @LastEditTime: 2025-08-28 14:05:48
 -->
 
 # React 相关内容
@@ -1897,10 +1897,10 @@ module.exports = {
 npm install --save-dev jest @testing-library/react @testing-library/jest-dom babel-jest jest-environment-jsdom
 ```
 
-比如 使用的 React 版本是 16.x 就需要安装兼容旧版 React 的测试库： 使用 12.x 版本的 @testing-library/react 和其他配套依赖。
+比如 使用的 React 版本是 16.x 就需要安装兼容旧版 React 的测试库： 使用 12.x 版本的 @testing-library/react 和其他配套依赖 jest@29 babel-jest@29 jest-environment-jsdom@29。实测 node 14.15.4 即可
 
 ```js
-npm install --save-dev jest @testing-library/react@12.1.5 @testing-library/jest-dom@5.16.5 babel-jest jest-environment-jsdom --legacy-peer-deps
+npm install --save-dev jest@29 @testing-library/react@12.1.5 @testing-library/jest-dom@5.16.5 babel-jest@29 jest-environment-jsdom@29 identity-obj-proxy --legacy-peer-deps
 ```
 
 注：npm install --legacy-peer-deps 的作用是忽略依赖冲突。
