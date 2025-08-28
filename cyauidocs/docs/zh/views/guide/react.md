@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-08-28 11:05:46
+ * @LastEditTime: 2025-08-28 11:08:53
 -->
 
 # React 相关内容
@@ -1867,6 +1867,7 @@ module.exports = {
   collectCoverageFrom: [
     "<rootDir>/src/**/*.{js,jsx}",
     "!<rootDir>/src/main.js",
+    "!<rootDir>/src/App.js",
     "!<rootDir>/src/routes/index.js",
     "!**/node_modules/**",
   ],
