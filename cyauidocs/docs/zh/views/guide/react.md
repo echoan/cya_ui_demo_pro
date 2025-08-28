@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-08-27 17:11:00
+ * @LastEditTime: 2025-08-28 11:05:46
 -->
 
 # React 相关内容
@@ -1893,18 +1893,19 @@ module.exports = {
 注意：安装 React Testing Library 的相关依赖 对于 node 版本是有要求的，node 版本要在 18.x 及以上；另外 @testing-library/react 要求 React 的版本要在 18 及以上。
 
 ```js
-npm install --save-dev jest @testing-library/react @testing-library/jest-dom babel-jest
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom babel-jest jest-environment-jsdom
 ```
 
-比如 使用的 React 版本是 16.x 就需要安装兼容旧版 React 的测试库： 使用 12.x 版本的 @testing-library/react。
+比如 使用的 React 版本是 16.x 就需要安装兼容旧版 React 的测试库： 使用 12.x 版本的 @testing-library/react 和其他配套依赖。
 
 ```js
-npm install --save-dev jest @testing-library/react@12.1.5 @testing-library/jest-dom@5.16.5 babel-jest --legacy-peer-deps
+npm install --save-dev jest @testing-library/react@12.1.5 @testing-library/jest-dom@5.16.5 babel-jest jest-environment-jsdom --legacy-peer-deps
 ```
 
 注：npm install --legacy-peer-deps 的作用是忽略依赖冲突。
 默认情况下，npm v7 及以上会严格检查依赖树，如果有依赖冲突会直接报错（比如某个包要求 React 18，但你项目是 React 16）。
 加上 --legacy-peer-deps 参数后，npm 会忽略这些冲突，强制安装所有依赖（类似 npm v6 的行为），这样可以让老项目或有冲突的依赖顺利安装。
+jest-environment-jsdom 提供了一个 浏览器-like 的环境，在测试中能用 document、window 等浏览器 API。
 
 #### 4. Test 目录下 创建 一个测试用例验证配置配置正确性
 
