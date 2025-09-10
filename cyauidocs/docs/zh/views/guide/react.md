@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-09-10 13:32:20
+ * @LastEditTime: 2025-09-10 15:49:42
 -->
 
 # React 相关内容
@@ -1404,6 +1404,494 @@ export default class Appone extends React.Component {
 "presets":["env","stage-0","react"],
 "plugins":["transform-runtime",["import", { "libraryName": "antd", "style": "css" }]]
 }
+```
+
+#### 25. React 中使用 react-loadable 实现路由的懒加载
+
+##### 入口文件 index.js
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import App1 from "./components/App1";
+
+ReactDOM.render(
+  <div>
+    <App1 />
+  </div>,
+  document.getElementById("app")
+);
+```
+
+##### 组件 App1
+
+```jsx
+import React from "react";
+import Loadable from "react-loadable";
+const LoadingComponent = ({ isLoading, error }) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  } else if (error) {
+    return <div>sorry there was a problem loading the page</div>;
+  } else {
+    return <div>ggg</div>;
+  }
+};
+const AsyncTab1 = Loadable({
+  loader: () => import("../components/Home"),
+  loading: LoadingComponent,
+});
+const AsyncTab2 = Loadable({
+  loader: () => import("../components/Movie"),
+  loading: LoadingComponent,
+});
+const AsyncTab3 = Loadable({
+  loader: () => import("../components/About"),
+  loading: LoadingComponent,
+});
+
+//在react中使用路由需要安装路由模块 npm install react-router-dom -S,之后需要在主入口将其导入
+import { HashRouter, Route, Link } from "react-router-dom";
+//HashRouter表示路由的根容器，将来所有跟路由相关的内容都需要包裹在HashRouter里面，一个网站中只需要一个HashRouter就好
+//Route 路由规则，有两个重要的属性 path和component
+//Link表示路由的连接，相当于Vue中的<router-link-to=""></router-link>
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    //用HashRouter来包裹根组件, 为当前网站启用路由,在HashRouter中只能有唯一一个根元素，如此处的div
+    return (
+      <HashRouter>
+        <div>
+          <h3>我是网站App的根组件</h3>
+          <Link to="/">首页</Link>&nbsp;&nbsp;
+          <Link to="/movie/top100/5">电影</Link>&nbsp;&nbsp;
+          <Link to="/about">我的</Link>&nbsp;&nbsp;
+          <hr />
+          {/*使用路由懒加载*/}
+          <Route exact path="/" component={AsyncTab1} />
+          <Route exact path="/movie/:type/:id" component={AsyncTab2} />
+          <Route path="/about" component={AsyncTab3} />
+          {/*使用路由懒加载*/}
+        </div>
+      </HashRouter>
+    );
+  }
+}
+```
+
+##### Home 组件 其中 Movie/About 类似 Home，在组件中引入一个 js 文件
+
+```jsx
+import React from "react";
+import myhome from "./myhome";
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <h4>我是首页</h4>
+      </div>
+    );
+  }
+}
+
+//myhome
+console.log("我是home组件");
+
+//当我们打开页面 切换导航菜单时 会发现 切换到的组件才会加载对应的资源（组件懒加载的实现）
+```
+
+#### 26. React 中 使用 lazy 实现路由的懒加载
+
+##### 核心文件代码
+
+lazy + Suspense：React 提供的懒加载方案，配合 Suspense 实现按需加载组件（代码分割），Suspense 的作用就是给异步加载的组件提供一个“过渡界面”。
+
+```jsx
+import React, { lazy, Suspense } from "react";
+import { HashRouter, Route, Link, Switch } from "react-router-dom";
+const Home = lazy(() => import("../components/Home"));
+const Movie = lazy(() => import("../components/Movie"));
+const About = lazy(() => import("../components/About"));
+const About1 = lazy(() => import("../components/About1"));
+//这四个组件使用 React.lazy 按需加载，在用户访问对应路由时才请求组件文件，从而减少首屏加载体积。
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    //用HashRouter来包裹根组件, 为当前网站启用路由,在HashRouter中只能有唯一一个根元素，如此处的div
+    return (
+      <HashRouter>
+        <div>
+          <h3>我是网站App的根组件</h3>
+          <Link to="/">首页</Link>&nbsp;&nbsp;
+          <Link to="/movie/top100/5">电影</Link>&nbsp;&nbsp;
+          <Link to="/about">我的</Link>&nbsp;&nbsp;
+          <hr />
+          <Suspense fallback={<div>loading...</div>}>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/movie/:type/:id" component={Movie} />
+              <Route path="/about" component={About} />
+            </Switch>
+          </Suspense>
+        </div>
+      </HashRouter>
+    );
+  }
+}
+```
+
+##### 🔹 为什么需要 Suspense
+
+上面用的
+`React.lazy(() => import('../components/Home'))`
+会在用户访问该路由时才去异步加载 `Home` 组件的 JS 文件。
+
+在组件还没加载完成之前，React 必须渲染点别的东西，不然页面就空白。
+
+`<Suspense>` 就是用来告诉 React：
+
+> 当它包裹的子组件还在加载的时候，先渲染 `fallback` 里的内容。
+
+---
+
+##### 🔹fallback 是什么
+
+`fallback={<div>loading...</div>}` 就是加载过程中的占位内容。
+
+也可以放一个转圈的 **Spinner**、**Skeleton** 等来提升体验。
+
+---
+
+##### 🔹 工作流程示意
+
+1. 用户点击 `/movie/top100/5`；
+2. `React.lazy` 动态请求 `Movie` 组件的代码；
+3. 在网络返回之前，`Suspense` 显示 `fallback`（loading...）；
+4. 一旦组件加载完成，React 自动替换掉 `fallback`，渲染真正的 `Movie` 页面。
+
+---
+
+##### 🔹 总结
+
+- **React.lazy** = 懒加载组件
+- **Suspense** = 给懒加载组件提供“加载中”的占位视图
+- **fallback** = “加载中”的内容
+
+💡 如果没有 `<Suspense>`，`lazy` 出来的组件在加载过程中页面会直接报错。
+
+#### 27. React 中的路由守卫的使用
+
+##### 页面组件
+
+```jsx
+import React, { Component, Suspense } from "react";
+import { HashRouter, Link, Switch } from "react-router-dom";
+import FrontEndAuth from "../components/FrontEndAuth";
+import routerMap from "./routerMap";
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <HashRouter>
+        <div>
+          <h3>我是网站App的根组件</h3>
+          <Link to="/">首页</Link>&nbsp;&nbsp;
+          <Link to="/home">主页</Link>&nbsp;&nbsp;
+          <Link to="/login">登录</Link>&nbsp;&nbsp;
+          <Link to="/mine">我的</Link>&nbsp;&nbsp;
+          <hr />
+          <Suspense fallback={<div>loading...</div>}>
+            <Switch>
+              <FrontEndAuth routerConfig={routerMap} />
+            </Switch>
+          </Suspense>
+        </div>
+      </HashRouter>
+    );
+  }
+}
+
+export default App;
+```
+
+##### FrontEndAuth 组件
+
+```jsx
+//创建一个高阶组件 来处理所有的路由跳转逻辑
+import React, { Component } from "react";
+import { Route, Redirect } from "react-router-dom";
+class FrontEndAuth extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const { routerConfig, location } = this.props;
+    const { pathname } = location;
+    const isLogin = sessionStorage.getItem("username");
+    console.log(pathname, isLogin);
+    console.log(location);
+    const targetRouterConfig = routerConfig.find(
+      (item) => item.path === pathname
+    );
+    console.log(targetRouterConfig);
+    //匹配到的如果是不需要权限校验的路由 是否登录都能进入到该页
+    if (targetRouterConfig && !targetRouterConfig.auth && !isLogin) {
+      const { component } = targetRouterConfig;
+      return <Route exact path={pathname} component={component} />;
+    }
+
+    if (isLogin) {
+      //已经登录 再点击登录 不应进入到登录页 这里让它重定向到主页
+      if (pathname == "/login") {
+        return <Redirect to="/" />;
+        //已经登录 路由合法 则可以进入到当前页 可能当前页是主页或者个人中心页
+      } else if (targetRouterConfig) {
+        return (
+          <Route
+            path={pathname}
+            exact
+            component={targetRouterConfig.component}
+          />
+        );
+      } else {
+        //路由不合法(没有对应路由映射规则)直接到404页
+        return <Redirect to="/404" />;
+      }
+    } else {
+      //如果未登陆状态 且当前页是需要进行权限校验的 那么应该进入到登录页
+      if (targetRouterConfig && targetRouterConfig.auth) {
+        return <Redirect to="/login" />;
+      } else {
+        //如果 未登陆状态 且 没有对应路由映射规则(路由不合法) 进入到 404页
+        return <Redirect to="/404" />;
+      }
+    }
+  }
+}
+
+export default FrontEndAuth;
+```
+
+##### routerMap 文件
+
+```js
+import { lazy } from "react";
+const Login = lazy(() => import("../components/Login"));
+const personCenter = lazy(() => import("../components/PersonCenter"));
+const Home = lazy(() => import("../components/Home"));
+const EmptyPage = lazy(() => import("../components/EmptyPage"));
+export default [
+  { path: "/", name: "Home", component: Home },
+  { path: "/home", name: "Home", component: Home },
+  { path: "/login", name: "Login", component: Login },
+  { path: "/404", name: "EmptyPage", component: EmptyPage },
+  { path: "/mine", name: "PersonCenter", component: personCenter, auth: true },
+];
+//只有登录了才能进个人中心页 在这里 添加字段 auth:true来添加权限校验
+```
+
+#### 28. React 中的路由嵌套和动态路由的使用
+
+##### 页面组件文件
+
+```jsx
+import React, { Component } from "react";
+import { HashRouter, Link, Route, Switch } from "react-router-dom";
+import Home from "./Home";
+import List from "./List";
+import Person from "./Person";
+import EmptyPage from "./EmptyPage";
+
+class App4 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <HashRouter>
+        <div>
+          <Link to="/">首页</Link> &nbsp;&nbsp;
+          <Link to="/list">列表</Link>&nbsp;&nbsp;
+          <Link to="/person">用户中心</Link>&nbsp;&nbsp;
+          <Link to="/other">其他</Link>&nbsp;&nbsp;
+        </div>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/list" component={List} />
+          <Route path="/person" component={Person} />
+          <Route component={EmptyPage} />
+        </Switch>
+      </HashRouter>
+    );
+  }
+}
+
+export default App4;
+```
+
+##### List 组件 该组件使用了动态路由
+
+```jsx
+import React, { Component } from "react";
+import { Link, Route, HashRouter, Redirect } from "react-router-dom";
+import Detail from "./Detail";
+class List extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <HashRouter>
+        <h4>我是List页</h4>
+        <ul>
+          <li>
+            <Link to="/list/react">react</Link>
+          </li>
+          <li>
+            <Link to="/list/vue">vue</Link>
+          </li>
+          <li>
+            <Link to="/list/anglar">anglar</Link>
+          </li>
+        </ul>
+        <Route path="/list/:title" component={Detail} />
+        <Redirect to="/list/react" component={Detail} />
+        {/* 通过Redirect设置在进入当前页面后默认显示的组件 进入该组件后默认显示的子组件是react */}
+      </HashRouter>
+    );
+  }
+}
+
+export default List;
+```
+
+##### Detail 组件
+
+```jsx
+import React, { Component } from "react";
+class Detail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <div>
+        <h3>Detail页</h3>
+        <h3>这是关于{this.props.match.params.title}的介绍</h3>
+      </div>
+    );
+  }
+}
+
+export default Detail;
+```
+
+##### Person 组件
+
+```jsx
+import React, { Component } from "react";
+import { Route, HashRouter, Link, Redirect } from "react-router-dom";
+import Mine from "./Mine";
+import PersonCenter from "./PersonCenter";
+class Person extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <HashRouter>
+        <h3>这里是个人中心</h3>
+        <Link to="/person/info">个人信息</Link>
+        <Link to="/person/mine">我的</Link>
+
+        <Route path="/person/info" component={PersonCenter} />
+        <Route path="/person/mine" component={Mine} />
+
+        {/*通过Redirect可以让我们在进入Person后默认显示PersonCenter组件*/}
+        <Redirect to="/person/info" component={PersonCenter} />
+      </HashRouter>
+    );
+  }
+}
+
+export default Person;
+```
+
+##### EmptyPage 组件
+
+```jsx
+import React, { Component } from "react";
+class EmptyPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return <h4>Not Find The Page 404</h4>;
+  }
+}
+export default EmptyPage;
+```
+
+#### 29. React 中的合成事件
+
+##### React 的 合成事件 是 “React 统一管理的、跨浏览器的、基于事件委托的事件系统”，让你写事件处理逻辑时不用考虑浏览器差异，也方便 React 做性能优化和批处理。
+
+##### React 并不是在每个 DOM 上绑事件，而是统一在根上收集 → 生成合成事件 → 调用你的回调（React16 及以前：事件统一委托在 document 上；React17 起委托在渲染的根节点上）。
+
+```jsx
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+
+class App5 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  buttonClick = () => {
+    console.log("这是react合成事件触发的");
+  };
+
+  componentDidMount() {
+    //原生方式绑定事件
+    let parent = ReactDOM.findDOMNode(this);
+    let button = parent.querySelector("button");
+    console.log(button);
+    button.addEventListener("click", function () {
+      console.log("我是原生事件触发的");
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.buttonClick}>react合成事件</button>
+      </div>
+    );
+  }
+}
+
+export default App5;
 ```
 
 ## tsx 中创建组件的方式
