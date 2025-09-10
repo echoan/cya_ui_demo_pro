@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-05-25 17:04:51
  * @LastEditors: Chengya
- * @LastEditTime: 2025-08-28 14:05:48
+ * @LastEditTime: 2025-09-10 13:32:20
 -->
 
 # React 相关内容
@@ -1958,6 +1958,14 @@ npm run test src/test/getDate.test.js / npx jest src/test/getDate.test.js
 npx jest --coverage / npm run test:coverage      （需要package.json中配置好）
 
 npm run test:coverage 生成的覆盖率报告，默认是整个项目的覆盖率，也就是所有被测试文件（通常是 src 目录下的 JS/TS 文件）的覆盖率统计。
+
+# 查看指定目录的测试用例的测试覆盖率
+
+npm run test:coverage unit-test/utils
+
+# 查看指定文件的测试用例的测试覆盖率
+
+npm run test:coverage unit-test/utils/fileName.test.js
 
 ```
 
