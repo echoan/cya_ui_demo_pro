@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-05-25 16:51:35
+ * @LastEditTime: 2025-09-15 16:44:43
  */
 module.exports = {
   base: "/cyaui/",
@@ -130,6 +130,48 @@ module.exports = {
             ],
           },
           {
+            title: "React相关",
+            collapsable: true,
+            children: [
+              {
+                title: "React基础",
+                collapsable: true,
+                children: [
+                  {
+                    title: "React基本使用方式",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react1.md",
+                  },
+                  {
+                    title: "React中jsx使用前的配置",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react2.md",
+                  },
+                  {
+                    title: "React中jsx语法的基本使用",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react3.md",
+                  },
+                  {
+                    title: "React中创建组件常用方式",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react4.md",
+                  },
+                  {
+                    title: "React中组件的基本传参",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react5.md",
+                  },
+                  {
+                    title: "React中组件的事件绑定",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react6.md",
+                  },
+                ],
+              },
+            ],
+          },
+          {
             title: "前端框架、组件库相关",
             collapsable: true,
             children: [
@@ -140,8 +182,14 @@ module.exports = {
               },
               {
                 title: "2.React相关",
-                collapsable: false,
-                path: "/zh/views/guide/react.md",
+                collapsable: true,
+                children: [
+                  {
+                    title: "React的使用方式",
+                    collapsable: false,
+                    path: "/zh/views/guide/react.md",
+                  },
+                ],
               },
             ],
           },
