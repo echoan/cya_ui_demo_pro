@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-09-15 16:45:41
  * @LastEditors: Chengya
- * @LastEditTime: 2025-09-16 11:13:11
+ * @LastEditTime: 2025-09-16 14:06:51
 -->
 
 ### React 中事件的绑定
@@ -182,4 +182,45 @@ React 不会帮你自动 .bind(this) 到组件实例，所以当事件触发时�
 在严格模式下，普通函数调用的 this 是 undefined, 非严格模式下 指向window。因此 需要使用箭头函数 或者 bind 方式来让this
 指向 组件实例。
 */
+```
+
+### React 中在类组件和函数组件中绑定事件
+
+示例
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+
+//react中基本的事件绑定
+//在class创建的组件中绑定事件
+class MyDom extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  buttonClick = () => {
+    console.log("hello world");
+  };
+  render() {
+    return <button onClick={this.buttonClick}>点击</button>;
+  }
+}
+
+function MyDom1() {
+  function buttonClick() {
+    console.log("goodbye world");
+  }
+  //或 const buttonClick = () => {
+  //   console.log("goodbye world");
+  // };
+  return <button onClick={buttonClick}>点击1</button>;
+}
+ReactDOM.render(
+  <div>
+    <MyDom />
+    <MyDom1 />
+  </div>,
+  document.getElementById("root")
+);
 ```

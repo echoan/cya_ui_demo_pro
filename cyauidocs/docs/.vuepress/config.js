@@ -3,7 +3,7 @@
  * @Description: Description
  * @Date: 2025-01-16 17:16:31
  * @LastEditors: Chengya
- * @LastEditTime: 2025-09-15 16:44:43
+ * @LastEditTime: 2025-09-16 14:52:51
  */
 module.exports = {
   base: "/cyaui/",
@@ -166,6 +166,21 @@ module.exports = {
                     title: "React中组件的事件绑定",
                     collapsable: false,
                     path: "/zh/views/guide/ReactBase/react6.md",
+                  },
+                  {
+                    title: "React中事件对象的用处",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react7.md",
+                  },
+                  {
+                    title: "React中表单的处理",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react8.md",
+                  },
+                  {
+                    title: "React中一个列表组件实例",
+                    collapsable: false,
+                    path: "/zh/views/guide/ReactBase/react9.md",
                   },
                 ],
               },
